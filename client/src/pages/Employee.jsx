@@ -1,5 +1,8 @@
 import { FiLogOut } from "react-icons/fi";
+import { MdLockClock } from "react-icons/md";
+import { PiClockClockwiseDuotone } from "react-icons/pi";
 import React, { useState, useEffect } from "react";
+import Clock from "react-clock";
 import {
   Box,
   ChakraProvider,
@@ -199,28 +202,32 @@ const Employee = () => {
               </Table>
             )}
           </Box>
-          <Box alignItems={"right"} ml={16}>
-            <Text fontSize="4xl" mt="4">
-              Current Time: {currentTime}
-            </Text>
+          <Box ml={16}>
+            <Box w="100%" display={"flex"} justifyContent={"flex-end"}>
+              <Text fontSize="4xl" mt="4">
+                Current Time: {currentTime}
+              </Text>
+            </Box>
             <Button
               mt="4"
               colorScheme="green"
               onClick={handleClockIn}
               disabled={clockedIn}
             >
-              Clock In
+              ClockIn&nbsp;
+              <PiClockClockwiseDuotone />
             </Button>
             <Button
               mt="4"
-              ml={4}
+              ml={2}
               colorScheme="blue"
               onClick={handleClockOut}
               disabled={clockedOut}
             >
-              Clock Out
+              ClockOut&nbsp;
+              <MdLockClock />
             </Button>
-            <Button ml={4} mt="4" colorScheme="red" onClick={handleLogout}>
+            <Button ml={2} mt="4" colorScheme="red" onClick={handleLogout}>
               Log Out&nbsp;
               <FiLogOut />
             </Button>

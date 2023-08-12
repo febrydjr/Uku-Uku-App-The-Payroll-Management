@@ -17,8 +17,14 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
-const ResetSchema = Yup.object().shape({
+const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email address format"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+      "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+    ),
 });
 
 const Login = () => {
@@ -108,7 +114,7 @@ const Login = () => {
           </Text>
           <Formik
             initialValues={initialValues}
-            validationSchema={ResetSchema}
+            validationSchema={validationSchema}
             onSubmit={handleLogin}
           >
             {() => (

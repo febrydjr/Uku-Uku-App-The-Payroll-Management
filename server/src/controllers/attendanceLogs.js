@@ -41,11 +41,10 @@ exports.getAttendanceLogs = async (req, res) => {
       return {
         date: log.clockIn,
         fullname: user.fullname,
-        // schedule_in: schedule_in.toISOString(),
         schedule_in: "08.00",
         schedule_out: "16.00",
-        clockIn: log.clockIn,
-        clockOut: log.clockOut,
+        clockIn: log.clockIn.toLocaleTimeString(),
+        clockOut: log.clockOut ? log.clockOut.toLocaleTimeString() : "-",
         total_salary: total_salary,
       };
     });
