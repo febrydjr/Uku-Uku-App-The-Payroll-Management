@@ -8,7 +8,7 @@ exports.getSalaryByUserId = async (req, res) => {
       include: [
         {
           model: Salary,
-          attributes: ["perhour_salary", "monthly_salary"],
+          attributes: ["perhour_salary", "monthly_salary", "total_salary"],
         },
         {
           model: Role,
@@ -21,14 +21,16 @@ exports.getSalaryByUserId = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const { username, fullname, Role: role, Salary: salary } = user;
+    const { username, email, fullname, Role: role, Salary: salary } = user;
 
     return res.status(200).json({
       username,
       fullname,
+      email,
       role_name: role.role_name,
       perhour_salary: salary.perhour_salary,
       monthly_salary: salary.monthly_salary,
+      total_salary: salary.total_salary,
     });
   } catch (error) {
     console.error(error);

@@ -1,3 +1,4 @@
+import { FiLogOut } from "react-icons/fi";
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -9,12 +10,14 @@ import {
   Tbody,
   Tr,
   Th,
+  Flex,
   Td,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 const theme = extendTheme({
   styles: {
     global: {
@@ -33,24 +36,8 @@ const Employee = () => {
   const [attendanceLog, setAttendanceLog] = useState([]);
   const [clockedIn, setClockedIn] = useState(false);
   const [clockedOut, setClockedOut] = useState(false);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem("token");
-      const decodedToken = JSON.parse(atob(token.split(".")[1]));
-
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/user/${decodedToken.user_id}`
-        );
-        setUserData(response.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserData();
-  }, []);
+  const toast = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -59,6 +46,29 @@ const Employee = () => {
     }, 1000);
 
     return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    const fetchAttendanceLog = async () => {
+      const token = localStorage.getItem("token");
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
+
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/salary/attendance/${decodedToken.user_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setAttendanceLog(response.data);
+      } catch (error) {
+        console.error("Error fetching attendance log:", error);
+      }
+    };
+
+    fetchAttendanceLog();
   }, []);
 
   const handleClockIn = async () => {
@@ -75,8 +85,23 @@ const Employee = () => {
           },
         }
       );
+      toast({
+        title: "Success!",
+        description: "Successfully clocked in!",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
       setClockedIn(true);
+      window.location.reload();
     } catch (error) {
+      toast({
+        title: "Error!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
       console.error("Error clocking in:", error);
     }
   };
@@ -95,63 +120,113 @@ const Employee = () => {
           },
         }
       );
+      toast({
+        title: "Success!",
+        description: "Successfully clocked out!",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
       setClockedOut(true);
       setUserData((prevUserData) => ({
         ...prevUserData,
         total_salary: response.data.totalSalary,
         today_revenue: response.data.TodayRevenue,
       }));
+      window.location.reload();
     } catch (error) {
+      toast({
+        title: "Error!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
       console.error("Error clocking out:", error);
     }
   };
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("token");
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
+
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/salary/${decodedToken.user_id}`
+        );
+        setUserData(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+    console.log(userData);
+  }, []);
+
+  async function handleLogout() {
+    localStorage.removeItem("token");
+    navigate("/");
+  }
   return (
     <ChakraProvider theme={theme}>
       <Box h="100vh" display="flex" flexDirection="column" alignItems="center">
-        <Text fontSize="4xl" mt="4">
-          Current Time: {currentTime}
-        </Text>
-        {userData && (
-          <Table mt="4" variant="striped" colorScheme="whiteAlpha">
-            <Thead>
-              <Tr>
-                <Th>Full Name</Th>
-                <Th>Email</Th>
-                <Th>Per Hour Salary</Th>
-                <Th>Monthly Salary</Th>
-                <Th>Total Salary</Th>
-                <Th>Role Name</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              <Tr>
-                <Td>{userData.fullname}</Td>
-                <Td>{userData.email}</Td>
-                <Td>{userData.perhour_salary}</Td>
-                <Td>{userData.monthly_salary}</Td>
-                <Td>{userData.total_salary}</Td>
-                <Td>{userData.Role.role_name}</Td>
-              </Tr>
-            </Tbody>
-          </Table>
-        )}
-        <Button
-          mt="4"
-          colorScheme="blue"
-          onClick={handleClockIn}
-          disabled={clockedIn}
-        >
-          Clock In
-        </Button>
-        <Button
-          mt="4"
-          colorScheme="red"
-          onClick={handleClockOut}
-          disabled={clockedOut}
-        >
-          Clock Out
-        </Button>
+        <Flex justifyContent={"right"}>
+          <Box>
+            {userData && (
+              <Table mt="4" variant="striped" colorScheme="whiteAlpha">
+                <Thead>
+                  <Tr>
+                    <Th width="20%">Full Name</Th>
+                    <Th width="20%">Email</Th>
+                    <Th width="15%">Per Hour Salary</Th>
+                    <Th width="15%">Monthly Salary</Th>
+                    <Th width="15%">Total Salary</Th>
+                    <Th width="15%">Role</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  <Tr>
+                    <Td>{userData.fullname}</Td>
+                    <Td>{userData.email}</Td>
+                    <Td>{userData.perhour_salary}</Td>
+                    <Td>{userData.monthly_salary}</Td>
+                    <Td>{userData.total_salary}</Td>
+                    <Td>{userData.role_name}</Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            )}
+          </Box>
+          <Box alignItems={"right"} ml={16}>
+            <Text fontSize="4xl" mt="4">
+              Current Time: {currentTime}
+            </Text>
+            <Button
+              mt="4"
+              colorScheme="green"
+              onClick={handleClockIn}
+              disabled={clockedIn}
+            >
+              Clock In
+            </Button>
+            <Button
+              mt="4"
+              ml={4}
+              colorScheme="blue"
+              onClick={handleClockOut}
+              disabled={clockedOut}
+            >
+              Clock Out
+            </Button>
+            <Button ml={4} mt="4" colorScheme="red" onClick={handleLogout}>
+              Log Out&nbsp;
+              <FiLogOut />
+            </Button>
+          </Box>
+        </Flex>
+
         <Text fontSize="xl" fontWeight="bold" mt="4">
           Attendance Log
         </Text>
@@ -170,13 +245,13 @@ const Employee = () => {
           <Tbody>
             {attendanceLog.map((log) => (
               <Tr key={log.date}>
-                <Td>{format(new Date(log.date), "yyyy-MM-dd")}</Td>
+                <Td>{format(new Date(log.date), "dd-MM-yyyy")}</Td>
                 <Td>{log.fullname}</Td>
-                <Td>08:00</Td>
-                <Td>16:00</Td>
-                <Td>{log.clock_in || "-"}</Td>
-                <Td>{log.clock_out || "-"}</Td>
-                <Td>{log.today_revenue}</Td>
+                <Td>{log.schedule_in}</Td>
+                <Td>{log.schedule_out}</Td>
+                <Td>{log.clockIn || "-"}</Td>
+                <Td>{log.clockOut || "-"}</Td>
+                <Td>{log.total_salary}</Td>
               </Tr>
             ))}
           </Tbody>
