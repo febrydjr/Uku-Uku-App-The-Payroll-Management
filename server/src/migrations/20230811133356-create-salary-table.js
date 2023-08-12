@@ -24,6 +24,9 @@ module.exports = {
       monthly_salary: {
         type: Sequelize.FLOAT,
       },
+      total_salary: {
+        type: Sequelize.FLOAT,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

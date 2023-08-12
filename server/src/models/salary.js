@@ -25,6 +25,9 @@ module.exports = (sequelize) => {
       monthly_salary: {
         type: DataTypes.FLOAT,
       },
+      total_salary: {
+        type: DataTypes.FLOAT,
+      },
     },
     {
       sequelize,
