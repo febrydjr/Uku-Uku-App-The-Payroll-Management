@@ -23,6 +23,7 @@ import {
 import { format } from "date-fns";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 const theme = extendTheme({
   styles: {
     global: {
@@ -65,11 +66,10 @@ const Employee = () => {
   useEffect(() => {
     const fetchAttendanceLog = async () => {
       const token = localStorage.getItem("token");
-      const decodedToken = JSON.parse(atob(token.split(".")[1]));
-
+      const decoded = jwt_decode(token);
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/salary/attendance/${decodedToken.user_id}`,
+          `http://localhost:8000/api/salary/attendance/${decoded.user_id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -87,7 +87,7 @@ const Employee = () => {
 
   const handleClockIn = async () => {
     const token = localStorage.getItem("token");
-    const decodedToken = JSON.parse(atob(token.split(".")[1]));
+    const decodedToken = jwt_decode(token);
 
     try {
       await axios.post(
@@ -122,7 +122,7 @@ const Employee = () => {
 
   const handleClockOut = async () => {
     const token = localStorage.getItem("token");
-    const decodedToken = JSON.parse(atob(token.split(".")[1]));
+    const decodedToken = jwt_decode(token);
 
     try {
       const response = await axios.post(
@@ -211,7 +211,7 @@ const Employee = () => {
         </Flex>
 
         <Text fontSize="xl" fontWeight="bold" mt="4">
-          Attendance Log
+          My Attendance Log
         </Text>
         <Table mt="4" variant="striped" colorScheme="whiteAlpha">
           <Thead>

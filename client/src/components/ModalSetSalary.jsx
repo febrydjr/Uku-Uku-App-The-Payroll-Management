@@ -117,7 +117,7 @@ const ModalSetSalary = ({ isOpen, onClose }) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader color="black">Set Salary</ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton color="black" />
         <ModalBody color="black">
           <FormControl>
             <FormLabel>Username</FormLabel>

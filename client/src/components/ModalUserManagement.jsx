@@ -52,9 +52,14 @@ const ModalUserManagement = ({ isOpen, onClose }) => {
         <ModalHeader ml={2} color={"black"}>
           Employee List
         </ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton color={"black"} />
         <ModalBody color={"black"}>
-          <Button ml={2} onClick={handleOpenAddEmployee}>
+          <Button
+            colorScheme="facebook"
+            mb={2}
+            ml={2}
+            onClick={handleOpenAddEmployee}
+          >
             Add Employee
           </Button>
           {error ? (

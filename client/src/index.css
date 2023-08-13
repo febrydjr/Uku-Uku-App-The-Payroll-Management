@@ -11,3 +11,8 @@
 .custom-datepicker .react-datepicker__input-container input {
   color: white;
 }
+
+.date-picker-hyphen {
+  margin: 0 5px;
+  color: #333;
+}

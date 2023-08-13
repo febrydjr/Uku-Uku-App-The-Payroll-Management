@@ -10,9 +10,11 @@ import {
   Button,
   Select,
   Text,
+  Divider,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 const ModalPayroll = ({ isOpen, onClose }) => {
   const [range, setRange] = useState("monthly");
@@ -20,8 +22,8 @@ const ModalPayroll = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
   const userToken = localStorage.getItem("token");
-  const decodedToken = JSON.parse(atob(userToken.split(".")[1]));
-  const userId = decodedToken.user_id;
+  const decoded = jwt_decode(userToken);
+  const userId = decoded.user_id;
 
   useEffect(() => {
     const fetchPayrollData = async () => {
@@ -66,7 +68,8 @@ const ModalPayroll = ({ isOpen, onClose }) => {
           <Text>
             End Date: {new Date(payrollData.endDate).toLocaleDateString("id")}
           </Text>
-          <Text mb={6}>Total Earnings: {payrollData.totalEarnings}</Text>
+          <Divider mt={2} mb={2} />
+          <Text mb={6}>Total Salary: {payrollData.totalEarnings}</Text>
         </ModalBody>
       </ModalContent>
     </Modal>

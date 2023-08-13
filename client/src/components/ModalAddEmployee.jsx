@@ -53,7 +53,7 @@ const ModalAddEmployee = ({ isOpen, onClose }) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader color="black">Add Employee</ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton color="black" />
         <ModalBody color="black">
           <FormControl>
             <Input

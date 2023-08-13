@@ -49,7 +49,7 @@ const ModalSalaryManagement = ({ isOpen, onClose }) => {
         <ModalHeader ml={2} color={"black"}>
           Employee Salary
         </ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton color={"black"} />
         <ModalBody color={"black"}>
           {error ? (
             <div>{error}</div>

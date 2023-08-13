@@ -21,7 +21,7 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
-
+import "../index.css";
 const ModalGetAttendance = ({ isOpen, onClose }) => {
   const [attendanceData, setAttendanceData] = useState([]);
   const [filteredAttendanceData, setFilteredAttendanceData] = useState([]);
@@ -96,6 +96,7 @@ const ModalGetAttendance = ({ isOpen, onClose }) => {
                 dateFormat="yyyy-MM-dd"
                 className="custom-datepicker"
               />
+              <Text>&nbsp;_&nbsp;</Text>
               <DatePicker
                 selected={endDate}
                 onChange={(date) => setEndDate(date)}
