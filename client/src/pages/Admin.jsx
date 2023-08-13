@@ -7,12 +7,6 @@ import {
   Text,
   extendTheme,
   Icon,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
 } from "@chakra-ui/react";
 import {
   FaUser,
@@ -25,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import ModalUserManagement from "../components/ModalUserManagement";
 import ModalSalaryManagement from "../components/ModalSalaryManagement";
 import ModalSetSalary from "../components/ModalSetSalary";
+import ModalGetAttendance from "../components/ModalGetAttendance";
 
 const theme = extendTheme({
   styles: {
@@ -43,6 +38,8 @@ const Admin = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isSalaryModalOpen, setIsSalaryModalOpen] = useState(false);
   const [isSetSalaryModalOpen, setIsSetSalaryModalOpen] = useState(false);
+  const [isGetAttendanceModalOpen, setIsGetAttendanceModalOpen] =
+    useState(false);
 
   const tiles = [
     { title: "Employee Management", icon: FaUser, color: "blue.500" },
@@ -69,9 +66,15 @@ const Admin = () => {
     setIsSetSalaryModalOpen(true);
   };
 
+  const openGetAttendanceModal = () => {
+    setIsGetAttendanceModalOpen(true);
+  };
+
   const closeModal = () => {
     setIsUserModalOpen(false);
     setIsSalaryModalOpen(false);
+    setIsSetSalaryModalOpen(false);
+    setIsGetAttendanceModalOpen(false);
   };
 
   return (
@@ -100,6 +103,8 @@ const Admin = () => {
                     ? openSalaryModal
                     : tile.title === "Set Salary"
                     ? openSetSalaryModal
+                    : tile.title === "Attendance History"
+                    ? openGetAttendanceModal
                     : null
                 }
                 cursor={tile.title === "Logout" ? "pointer" : "pointer"}
@@ -124,6 +129,10 @@ const Admin = () => {
             onClose={closeModal}
           />
           <ModalSetSalary isOpen={isSetSalaryModalOpen} onClose={closeModal} />
+          <ModalGetAttendance
+            isOpen={isGetAttendanceModalOpen}
+            onClose={closeModal}
+          />
         </Box>
       </Box>
     </ChakraProvider>

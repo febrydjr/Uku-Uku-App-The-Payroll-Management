@@ -104,8 +104,7 @@ const ModalSetSalary = ({ isOpen, onClose }) => {
         isClosable: true,
       });
       setIsSubmitting(false);
-      //   onClose();
-      window.location.reload();
+      onClose();
     } catch (error) {
       setSubmitError("Error submitting data");
       setIsSubmitting(false);

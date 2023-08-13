@@ -62,7 +62,7 @@ const ModalUserManagement = ({ isOpen, onClose }) => {
           ) : (
             <Flex direction="column" bg={dataColor} p={2}>
               <SimpleGrid
-                columns={5} // Adding an extra column for birthdate
+                columns={5}
                 w="full"
                 textTransform="uppercase"
                 bg={bg2}
@@ -80,7 +80,7 @@ const ModalUserManagement = ({ isOpen, onClose }) => {
               </SimpleGrid>
               {users.map((user) => (
                 <SimpleGrid
-                  columns={5} // Matching the number of columns
+                  columns={5}
                   w="full"
                   py={2}
                   px={4}

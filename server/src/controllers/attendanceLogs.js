@@ -4,37 +4,26 @@ const { Sequelize } = require("sequelize");
 exports.getAttendanceLogs = async (req, res) => {
   try {
     const { user_id } = req.params;
-
-    // Find the user based on user_id
     const user = await User.findByPk(user_id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Fetch attendance logs for the user
     const attendanceLogs = await Logging.findAll({
       where: {
         user_id: user.user_id,
-        clockIn: {
-          [Sequelize.Op.between]: [
-            new Date().setHours(0, 0, 0, 0),
-            new Date().setHours(23, 59, 59, 999),
-          ],
-        },
       },
-      order: [["clockIn", "ASC"]],
+      order: [["clockIn", "DESC"]],
     });
 
-    // Fetch the user's salary information
     const salary = await Salary.findOne({ where: { user_id: user.user_id } });
 
-    // Prepare the response data
     const attendanceData = attendanceLogs.map((log) => {
       const schedule_in = new Date(log.clockIn);
-      schedule_in.setHours(8, 0, 0, 0); // Schedule in at 08:00 AM
+      schedule_in.setHours(8, 0, 0, 0);
 
       const schedule_out = new Date(log.clockIn);
-      schedule_out.setHours(16, 0, 0, 0); // Schedule out at 16:00 PM
+      schedule_out.setHours(16, 0, 0, 0);
 
       const total_salary = salary ? salary.total_salary : 0;
 

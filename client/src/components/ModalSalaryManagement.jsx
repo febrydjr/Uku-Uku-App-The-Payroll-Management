@@ -23,8 +23,6 @@ const ModalSalaryManagement = ({ isOpen, onClose }) => {
       try {
         const response = await axios.get("http://localhost:8000/api/salary");
         setUsers(response.data.users);
-        // console.log(response.data.users);
-        // console.log(users.Salary.perhour_salary);
       } catch (error) {
         setError("Error fetching user data");
         console.error("Error fetching user data:", error);
@@ -36,6 +34,13 @@ const ModalSalaryManagement = ({ isOpen, onClose }) => {
 
   const dataColor = useColorModeValue("white", "gray.800");
   const bg2 = useColorModeValue("gray.100", "gray.700");
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+    }).format(value);
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size={"6xl"}>
@@ -75,8 +80,12 @@ const ModalSalaryManagement = ({ isOpen, onClose }) => {
                   key={user.user_id}
                 >
                   <span>{user.fullname}</span>
-                  <chakra.span>{user.Salary.perhour_salary}</chakra.span>
-                  <chakra.span>{user.Salary.monthly_salary}</chakra.span>
+                  <chakra.span>
+                    {formatCurrency(user.Salary.perhour_salary)}
+                  </chakra.span>
+                  <chakra.span>
+                    {formatCurrency(user.Salary.monthly_salary)}
+                  </chakra.span>
                 </SimpleGrid>
               ))}
             </Flex>

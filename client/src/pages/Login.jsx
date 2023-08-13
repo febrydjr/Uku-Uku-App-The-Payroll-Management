@@ -30,30 +30,30 @@ const validationSchema = Yup.object().shape({
 const Login = () => {
   const toast = useToast();
   const navigate = useNavigate();
-  //   useEffect(() => {
-  //     const token = localStorage.getItem("token");
-  //     if (token) {
-  //       try {
-  //         const decoded = jwt_decode(token);
-  //         const isAdmin = decoded.is_admin;
-  //         if (isAdmin) {
-  //           return navigate("/dashboard");
-  //         } else {
-  //           return navigate("/cashier");
-  //         }
-  //       } catch (error) {
-  //         return navigate("/not-found");
-  //       }
-  //     } else {
-  //       return navigate("/");
-  //     }
-  //   }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwt_decode(token);
+        const role = decoded.role;
+        if (role === "admin") {
+          return navigate("/admin");
+        } else {
+          return navigate("/employee");
+        }
+      } catch (error) {
+        return navigate("/not-found");
+      }
+    } else {
+      return navigate("/");
+    }
+  }, []);
 
   const handleLogin = async (values) => {
     try {
-      const { identifier, password } = values;
+      const { email, password } = values;
       const res = await axios.post("http://localhost:8000/api/auth/login", {
-        identifier,
+        email,
         password,
       });
       if (res.status === 200) {
@@ -86,26 +86,26 @@ const Login = () => {
   };
 
   const initialValues = {
-    identifier: "",
+    email: "",
     password: "",
   };
 
   return (
     <Box
       fontFamily={"Victor Mono"}
-      bg={"#000000"}
+      bg={"#2a2b2e"}
       backgroundSize={"cover"}
       h={"100vh"}
     >
       <Box display="flex" alignItems="center" justifyContent="center" h="100vh">
         <Box
-          bgColor={"#2A2B2E"}
+          bgColor={"white"}
           w="450px"
           p={5}
           border={"1px solid #2D2D2D"}
           borderWidth={1}
           borderRadius={8}
-          color={"white"}
+          color={"black"}
           boxShadow={"dark-lg"}
         >
           <Text fontSize={"4xl"}>App Login!</Text>
@@ -120,21 +120,15 @@ const Login = () => {
             {() => (
               <Form>
                 <>
-                  <Field name="identifier">
+                  <Field name="email">
                     {({ field, form }) => (
                       <FormControl
-                        isInvalid={
-                          form.errors.identifier && form.touched.identifier
-                        }
+                        isInvalid={form.errors.email && form.touched.email}
                         mb={2}
                       >
-                        <FormLabel htmlFor="identifier">
-                          Username/Email
-                        </FormLabel>
-                        <Input {...field} id="identifier" />
-                        <FormErrorMessage>
-                          {form.errors.identifier}
-                        </FormErrorMessage>
+                        <FormLabel htmlFor="email">Email</FormLabel>
+                        <Input {...field} id="email" />
+                        <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>

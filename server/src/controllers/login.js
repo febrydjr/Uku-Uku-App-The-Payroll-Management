@@ -1,19 +1,17 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { User, Role } = require("../models"); // Import the Role model
+const { User, Role } = require("../models");
 const { Op } = require("sequelize");
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
 
 exports.login = async (req, res) => {
   try {
-    const { identifier, password } = req.body;
+    const { email, password } = req.body;
 
     const user = await User.findOne({
-      where: {
-        [Op.or]: [{ email: identifier }, { username: identifier }],
-      },
-      include: Role, // Include the Role model to fetch role information
+      where: { email },
+      include: Role,
     });
 
     if (!user) {
@@ -29,7 +27,8 @@ exports.login = async (req, res) => {
       {
         user_id: user.user_id,
         username: user.username,
-        role: user.Role.role_name, // Use user.Role to access role_name
+        email: user.email,
+        role: user.Role.role_name,
       },
       process.env.JWT_KEY,
       { expiresIn: "8h" }
@@ -39,7 +38,7 @@ exports.login = async (req, res) => {
       token,
       user_id: user.user_id,
       username: user.username,
-      role: user.Role.role_name, // Use user.Role to access role_name
+      role: user.Role.role_name,
     });
   } catch (error) {
     console.error(error);

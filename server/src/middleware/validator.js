@@ -5,6 +5,7 @@ require("dotenv").config({
 });
 
 const identifier = body("identifier").notEmpty().withMessage("ID is empty");
+const email = body("email").isEmail().notEmpty().withMessage("Email is empty");
 const password = body("password").notEmpty().withMessage("Password is empty");
 
 function ValidationResult(req, res, next) {
@@ -13,7 +14,7 @@ function ValidationResult(req, res, next) {
   next();
 }
 
-const loginValidator = [identifier, password];
+const loginValidator = [email, password];
 
 module.exports = {
   loginValidator,

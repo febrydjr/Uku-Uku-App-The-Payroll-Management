@@ -27,7 +27,6 @@ function authenticate(req, res, next) {
 function authorize(role) {
   return (req, res, next) => {
     if (!req.account || req.account.role !== role) {
-      // Change role_id to role_name
       return res.status(403).json({ message: "Access forbidden" });
     }
     next();

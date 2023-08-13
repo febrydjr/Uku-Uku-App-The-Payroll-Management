@@ -1,8 +1,10 @@
 import { FiLogOut } from "react-icons/fi";
 import { MdLockClock } from "react-icons/md";
 import { PiClockClockwiseDuotone } from "react-icons/pi";
+import { BsCashStack } from "react-icons/bs";
 import React, { useState, useEffect } from "react";
 import Clock from "react-clock";
+import ModalPayroll from "../components/ModalPayroll";
 import {
   Box,
   ChakraProvider,
@@ -41,6 +43,15 @@ const Employee = () => {
   const [clockedOut, setClockedOut] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
+  const [isPayrollModalOpen, setIsPayrollModalOpen] = useState(false);
+
+  const openPayrollModal = () => {
+    setIsPayrollModalOpen(true);
+  };
+
+  const closePayrollModal = () => {
+    setIsPayrollModalOpen(false);
+  };
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -149,25 +160,6 @@ const Employee = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem("token");
-      const decodedToken = JSON.parse(atob(token.split(".")[1]));
-
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/salary/${decodedToken.user_id}`
-        );
-        setUserData(response.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserData();
-    console.log(userData);
-  }, []);
-
   async function handleLogout() {
     localStorage.removeItem("token");
     navigate("/");
@@ -176,36 +168,10 @@ const Employee = () => {
     <ChakraProvider theme={theme}>
       <Box h="100vh" display="flex" flexDirection="column" alignItems="center">
         <Flex justifyContent={"right"}>
-          <Box>
-            {userData && (
-              <Table mt="4" variant="striped" colorScheme="whiteAlpha">
-                <Thead>
-                  <Tr>
-                    <Th width="20%">Full Name</Th>
-                    <Th width="20%">Email</Th>
-                    <Th width="15%">Per Hour Salary</Th>
-                    <Th width="15%">Monthly Salary</Th>
-                    <Th width="15%">Total Salary</Th>
-                    <Th width="15%">Role</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  <Tr>
-                    <Td>{userData.fullname}</Td>
-                    <Td>{userData.email}</Td>
-                    <Td>{userData.perhour_salary}</Td>
-                    <Td>{userData.monthly_salary}</Td>
-                    <Td>{userData.total_salary}</Td>
-                    <Td>{userData.role_name}</Td>
-                  </Tr>
-                </Tbody>
-              </Table>
-            )}
-          </Box>
-          <Box ml={16}>
-            <Box w="100%" display={"flex"} justifyContent={"flex-end"}>
-              <Text fontSize="4xl" mt="4">
-                Current Time: {currentTime}
+          <Box mb={4}>
+            <Box w="100%" display={"flex"} justifyContent={"center"}>
+              <Text fontSize="6xl" mt="4">
+                {currentTime}
               </Text>
             </Box>
             <Button
@@ -227,6 +193,16 @@ const Employee = () => {
               ClockOut&nbsp;
               <MdLockClock />
             </Button>
+            <Button
+              ml={2}
+              mt={4}
+              colorScheme="whiteAlpha"
+              onClick={openPayrollModal}
+            >
+              Payroll &nbsp;
+              <BsCashStack />
+            </Button>
+
             <Button ml={2} mt="4" colorScheme="red" onClick={handleLogout}>
               Log Out&nbsp;
               <FiLogOut />
@@ -246,7 +222,7 @@ const Employee = () => {
               <Th>Schedule Out</Th>
               <Th>Clock In</Th>
               <Th>Clock Out</Th>
-              <Th>Today Revenue</Th>
+              {/* <Th>Today Revenue</Th> */}
             </Tr>
           </Thead>
           <Tbody>
@@ -258,11 +234,12 @@ const Employee = () => {
                 <Td>{log.schedule_out}</Td>
                 <Td>{log.clockIn || "-"}</Td>
                 <Td>{log.clockOut || "-"}</Td>
-                <Td>{log.total_salary}</Td>
+                {/* <Td>{log.total_salary}</Td> */}
               </Tr>
             ))}
           </Tbody>
         </Table>
+        <ModalPayroll isOpen={isPayrollModalOpen} onClose={closePayrollModal} />
       </Box>
     </ChakraProvider>
   );

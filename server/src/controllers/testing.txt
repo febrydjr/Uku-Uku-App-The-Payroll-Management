@@ -41,13 +41,13 @@ exports.clockIn = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
 exports.clockOut = async (req, res) => {
   try {
     const { username } = req.body;
+
     const user = await User.findOne({
       where: { username },
-      include: [Salary],
+      include: [Salary], 
     });
 
     if (!user) {
@@ -71,13 +71,13 @@ exports.clockOut = async (req, res) => {
     const currentTime = new Date();
 
     if (latestLog) {
-      const workMinutes = Math.min(
-        480,
-        (currentTime - latestLog.clockIn) / (1000 * 60)
+      const workHours = Math.min(
+        8,
+        currentTime.getHours() - latestLog.clockIn.getHours()
       );
 
-      const perMinuteSalary = (user.Salary.perhour_salary || 0) / 60;
-      const earnings = perMinuteSalary * workMinutes;
+      const hourlySalary = user.Salary.perhour_salary || 0;
+      const earnings = hourlySalary * workHours;
 
       await Logging.update(
         { clockOut: currentTime },
@@ -93,7 +93,7 @@ exports.clockOut = async (req, res) => {
       return res.status(200).json({
         message: "Clock-out successful",
         totalSalary: newTotalSalary,
-        TodayEarnings: earnings,
+        TodayRevenue: earnings,
       });
     } else {
       const previousDayLogs = await Logging.findAll({
@@ -109,15 +109,15 @@ exports.clockOut = async (req, res) => {
         order: [["clockIn", "ASC"]],
       });
 
-      const previousDayWorkMinutes = previousDayLogs.reduce(
-        (totalMinutes, log) =>
-          totalMinutes +
-          Math.min(480, (log.clockOut - log.clockIn) / (1000 * 60)),
+      const previousDayWorkHours = previousDayLogs.reduce(
+        (totalHours, log) =>
+          totalHours +
+          Math.min(8, log.clockOut.getHours() - log.clockIn.getHours()),
         0
       );
 
       const previousDayEarnings =
-        ((user.Salary.perhour_salary || 0) / 60) * previousDayWorkMinutes * 0.5;
+        (user.Salary.perhour_salary || 0) * previousDayWorkHours * 0.5;
 
       const currentTotalSalary = user.Salary.total_salary || 0;
       const newTotalSalary = currentTotalSalary + previousDayEarnings;
@@ -130,7 +130,7 @@ exports.clockOut = async (req, res) => {
         message:
           "Clock-out successful (50% rate applied for the forgotten day)",
         totalSalary: newTotalSalary,
-        TodayEarnings: previousDayEarnings,
+        TodayRevenue: previousDayEarnings,
       });
     }
   } catch (error) {

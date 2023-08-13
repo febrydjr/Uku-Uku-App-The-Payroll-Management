@@ -4,20 +4,17 @@ exports.setSalary = async (req, res) => {
   try {
     const { username, perhour_salary, monthly_salary } = req.body;
 
-    // Check if the requesting user is an admin
     if (req.account.role !== "admin") {
       return res
         .status(403)
         .json({ message: "Only admin can update salaries" });
     }
 
-    // Find the user based on username
     const user = await User.findOne({ where: { username } });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Update the specific fields for the user's salary
     await Salary.update(
       {
         perhour_salary:

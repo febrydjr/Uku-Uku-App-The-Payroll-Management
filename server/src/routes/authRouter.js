@@ -13,7 +13,7 @@ router.post(
   validator.ValidationResult,
   login.login
 ); //login
-router.post("/send-link", sendLink.sendLink); //send link regis
-router.post("/register", register.register); //register employee baru
+router.post("/send-link", sendLink.sendLink);
+router.post("/register", register.register);
 
 module.exports = router;

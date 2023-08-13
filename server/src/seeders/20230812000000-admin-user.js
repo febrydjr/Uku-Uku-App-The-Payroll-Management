@@ -24,7 +24,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    // Delete the admin user data
     return queryInterface.bulkDelete("Users", { username: "admin" });
   },
 };
