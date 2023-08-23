@@ -28,6 +28,7 @@ const ModalSetSalary = ({ isOpen, onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const API_URL = "https://uku-uku.cyclic.cloud";
+
   useEffect(() => {
     const fetchUsernames = async () => {
       try {
@@ -68,10 +69,18 @@ const ModalSetSalary = ({ isOpen, onClose }) => {
 
   const handlePerhourSalaryChange = (event) => {
     setPerhourSalary(event.target.value);
+    const monthlySalaryValue = (parseFloat(event.target.value) * 730).toFixed(
+      2
+    );
+    setMonthlySalary(monthlySalaryValue);
   };
 
   const handleMonthlySalaryChange = (event) => {
     setMonthlySalary(event.target.value);
+    const perhourSalaryValue = (parseFloat(event.target.value) / 730).toFixed(
+      2
+    );
+    setPerhourSalary(perhourSalaryValue);
   };
 
   const handleSubmit = async () => {
@@ -160,9 +169,6 @@ const ModalSetSalary = ({ isOpen, onClose }) => {
           >
             Set Salary
           </Button>
-          {/* <Button onClick={onClose} colorScheme="red">
-            Close
-          </Button> */}
         </ModalBody>
       </ModalContent>
     </Modal>
