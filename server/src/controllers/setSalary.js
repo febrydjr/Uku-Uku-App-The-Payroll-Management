@@ -14,14 +14,8 @@ exports.setSalary = async (req, res) => {
 
     await Salary.update(
       {
-        perhour_salary:
-          perhour_salary !== undefined
-            ? perhour_salary
-            : user.Salary.perhour_salary,
-        monthly_salary:
-          monthly_salary !== undefined
-            ? monthly_salary
-            : user.Salary.monthly_salary,
+        perhour_salary,
+        monthly_salary,
       },
       { where: { user_id: user.user_id }, transaction: t }
     );
