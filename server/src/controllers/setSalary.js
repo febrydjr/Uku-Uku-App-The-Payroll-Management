@@ -6,12 +6,6 @@ exports.setSalary = async (req, res) => {
   try {
     const { username, perhour_salary, monthly_salary } = req.body;
 
-    // if (req.account.role !== "admin") {
-    //   return res
-    //     .status(403)
-    //     .json({ message: "Only admin can update salaries" });
-    // }
-
     const user = await User.findOne({ where: { username } });
     if (!user) {
       await t.rollback();

@@ -84,7 +84,7 @@ const ModalSetSalary = ({ isOpen, onClose }) => {
         perhour_salary: parseFloat(perhourSalary),
         monthly_salary: parseFloat(monthlySalary),
       };
-
+      console.log(requestBody);
       const token = localStorage.getItem("token");
 
       const response = await axios.patch(
