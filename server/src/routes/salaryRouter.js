@@ -17,6 +17,6 @@ router.get(
 router.get("/attendance", getAllAttendanceLogs.getAllAttendanceLogs);
 router.get("/:user_id", getUserSalary.getSalaryByUserId);
 router.get("/", getAllUsersWithSalaries.getAllUsersWithSalaries);
-router.patch("/set", setSalary.setSalary);
+router.post("/set", setSalary.setSalary);
 
 module.exports = router;

@@ -87,7 +87,7 @@ const ModalSetSalary = ({ isOpen, onClose }) => {
       console.log(requestBody);
       const token = localStorage.getItem("token");
 
-      const response = await axios.patch(
+      const response = await axios.post(
         `${API_URL}/api/salary/set`,
         requestBody,
         {
