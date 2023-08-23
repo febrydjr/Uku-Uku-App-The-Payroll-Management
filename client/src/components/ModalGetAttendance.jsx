@@ -28,6 +28,7 @@ const ModalGetAttendance = ({ isOpen, onClose }) => {
   const [searchName, setSearchName] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const API_URL = "https://uku-uku.cyclic.cloud";
 
   useEffect(() => {
     fetchAttendanceData();
@@ -40,7 +41,7 @@ const ModalGetAttendance = ({ isOpen, onClose }) => {
   const fetchAttendanceData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/salary/attendance"
+        `${API_URL}/api/salary/attendance`
       );
       setAttendanceData(response.data);
     } catch (error) {

@@ -19,11 +19,11 @@ const ModalUserManagement = ({ isOpen, onClose }) => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
   const [isAddEmployeeOpen, setIsAddEmployeeOpen] = useState(false);
-
+  const API_URL = "https://uku-uku.cyclic.cloud";
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/auth");
+        const response = await axios.get(`${API_URL}/api/auth`);
         setUsers(response.data);
       } catch (error) {
         setError("Error fetching user data");

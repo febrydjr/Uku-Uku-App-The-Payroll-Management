@@ -17,11 +17,11 @@ import axios from "axios";
 const ModalSalaryManagement = ({ isOpen, onClose }) => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
-
+  const API_URL = "https://uku-uku.cyclic.cloud";
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/salary");
+        const response = await axios.get(`${API_URL}/api/salary`);
         setUsers(response.data.users);
       } catch (error) {
         setError("Error fetching user data");

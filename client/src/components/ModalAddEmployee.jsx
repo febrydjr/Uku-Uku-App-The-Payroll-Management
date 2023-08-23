@@ -18,6 +18,7 @@ const ModalAddEmployee = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+  const API_URL = "https://uku-uku.cyclic.cloud";
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -28,10 +29,9 @@ const ModalAddEmployee = ({ isOpen, onClose }) => {
       setIsSubmitting(true);
       setSubmitError(null);
 
-      const response = await axios.post(
-        "http://localhost:8000/api/auth/send-link",
-        { email }
-      );
+      const response = await axios.post(`${API_URL}/api/auth/send-link`, {
+        email,
+      });
       setIsSubmitting(false);
       toast({
         title: "Success",

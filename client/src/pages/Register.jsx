@@ -19,7 +19,7 @@ const Register = () => {
   const toast = useToast();
   const [token, setToken] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
+  const API_URL = "https://uku-uku.cyclic.cloud";
   useEffect(() => {
     const url = window.location.href.split("/");
     const extractedToken = url[url.length - 1];
@@ -52,10 +52,7 @@ const Register = () => {
 
   const handleSubmit = async (values) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/auth/register",
-        values
-      );
+      const response = await axios.post(`${API_URL}/api/auth/register`, values);
       if (response.status === 200 || response.status === 201) {
         toast({
           title: "Success",

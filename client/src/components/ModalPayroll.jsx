@@ -20,7 +20,7 @@ const ModalPayroll = ({ isOpen, onClose }) => {
   const [range, setRange] = useState("monthly");
   const [payrollData, setPayrollData] = useState({});
   const navigate = useNavigate();
-
+  const API_URL = "https://uku-uku.cyclic.cloud";
   const userToken = localStorage.getItem("token");
   const decoded = jwt_decode(userToken);
   const userId = decoded.user_id;
@@ -29,7 +29,7 @@ const ModalPayroll = ({ isOpen, onClose }) => {
     const fetchPayrollData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/salary/payroll/${userId}?range=${range}`
+          `${API_URL}/api/salary/payroll/${userId}?range=${range}`
         );
         setPayrollData(response.data);
       } catch (error) {

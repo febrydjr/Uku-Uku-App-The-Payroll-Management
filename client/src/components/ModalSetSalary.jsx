@@ -27,11 +27,11 @@ const ModalSetSalary = ({ isOpen, onClose }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
-
+  const API_URL = "https://uku-uku.cyclic.cloud";
   useEffect(() => {
     const fetchUsernames = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/auth");
+        const response = await axios.get(`${API_URL}/api/auth`);
         setUsernames(response.data);
       } catch (error) {
         console.error("Error fetching usernames:", error);
@@ -43,7 +43,7 @@ const ModalSetSalary = ({ isOpen, onClose }) => {
   useEffect(() => {
     const fetchUserSalary = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/salary");
+        const response = await axios.get(`${API_URL}/api/salary`);
         const userData = response.data.users.find(
           (user) => user.username === selectedUsername
         );
@@ -88,7 +88,7 @@ const ModalSetSalary = ({ isOpen, onClose }) => {
       const token = localStorage.getItem("token");
 
       const response = await axios.patch(
-        "http://localhost:8000/api/salary/set",
+        `${API_URL}/api/salary/set`,
         requestBody,
         {
           headers: {

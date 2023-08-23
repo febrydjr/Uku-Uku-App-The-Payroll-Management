@@ -45,7 +45,7 @@ const Employee = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const [isPayrollModalOpen, setIsPayrollModalOpen] = useState(false);
-
+  const API_URL = "https://uku-uku.cyclic.cloud";
   const openPayrollModal = () => {
     setIsPayrollModalOpen(true);
   };
@@ -69,7 +69,7 @@ const Employee = () => {
       const decoded = jwt_decode(token);
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/salary/attendance/${decoded.user_id}`,
+          `${API_URL}/api/salary/attendance/${decoded.user_id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -91,7 +91,7 @@ const Employee = () => {
 
     try {
       await axios.post(
-        "http://localhost:8000/api/clock/in",
+        `${API_URL}/api/clock/in`,
         { username: decodedToken.username },
         {
           headers: {
@@ -126,7 +126,7 @@ const Employee = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/clock/out",
+        `${API_URL}/api/clock/out`,
         { username: decodedToken.username },
         {
           headers: {

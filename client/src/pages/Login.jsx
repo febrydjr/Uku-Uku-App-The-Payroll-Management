@@ -28,6 +28,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const Login = () => {
+  const API_URL = "https://uku-uku.cyclic.cloud";
   const toast = useToast();
   const navigate = useNavigate();
   useEffect(() => {
@@ -52,7 +53,7 @@ const Login = () => {
   const handleLogin = async (values) => {
     try {
       const { email, password } = values;
-      const res = await axios.post("http://localhost:8000/api/auth/login", {
+      const res = await axios.post(`${API_URL}/api/auth/login`, {
         email,
         password,
       });
