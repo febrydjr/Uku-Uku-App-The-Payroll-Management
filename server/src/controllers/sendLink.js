@@ -10,7 +10,7 @@ exports.sendLink = async (req, res) => {
       expiresIn: "15m",
     });
 
-    const link = `http://localhost:3000/register/${token}`;
+    const link = `https://uku-uku.vercel.app/register/${token}`;
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
